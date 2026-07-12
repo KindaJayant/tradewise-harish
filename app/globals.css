@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  background-color: #101225;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #101225;
+  background-image:
+    linear-gradient(135deg, rgba(215, 168, 74, 0.16) 0 1px, transparent 1px 34px),
+    linear-gradient(225deg, rgba(89, 103, 216, 0.12) 0 1px, transparent 1px 38px),
+    linear-gradient(180deg, #101225 0%, #161b35 46%, #f3f0e8 46%, #ebe7dd 100%);
+  color: #101225;
+}
+
+* {
+  border-color: #d9d0bc;
+}
+
+::selection {
+  background: rgba(215, 168, 74, 0.34);
+  color: #101225;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(8%) sepia(25%) saturate(1218%) hue-rotate(205deg) brightness(94%) contrast(97%);
+}
+
+input[type="date"]::-webkit-datetime-edit,
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #0a1628;
+}
+
+.panel-surface {
+  background: linear-gradient(180deg, rgba(255, 252, 244, 0.96), rgba(244, 239, 229, 0.98));
+  border: 1px solid rgba(209, 194, 161, 0.92);
+  box-shadow:
+    0 20px 60px rgba(16, 18, 37, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.stellar-panel {
+  background: linear-gradient(135deg, rgba(24, 29, 59, 0.98), rgba(12, 14, 30, 0.98));
+  border: 1px solid rgba(215, 168, 74, 0.28);
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.tab-surface {
+  background: rgba(255, 252, 244, 0.82);
+  border: 1px solid rgba(209, 194, 161, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.shimmer-bar {
+  background-image: linear-gradient(
+    90deg,
+    rgba(221, 210, 188, 0.75) 0%,
+    rgba(255, 252, 244, 0.95) 50%,
+    rgba(221, 210, 188, 0.75) 100%
+  );
+  background-size: 200% 100%;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

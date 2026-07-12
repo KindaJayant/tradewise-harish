@@ -1,0 +1,144 @@
+import { NextRequest, NextResponse } from "next/server";
+
+import { getExaWebContext } from "@/lib/exa";
+import { SECTORS } from "@/lib/markets";
+import { runOpenRouterAnalysis } from "@/lib/openrouter";
+import { buildPrompt } from "@/lib/prompts";
+import type { AnalysisKind, AnalysisRow, AnalysisResponse } from "@/types/analysis";
+
+export const runtime = "edge";
+
+interface AnalyzeRequestBody {
+  date?: unknown;
+  period?: unknown;
+  sector?: unknown;
+}
+
+const validAnalysisKinds: AnalysisKind[] = [
+  "daily",
+  "weekly",
+  "monthly",
+  "half_yearly",
+  "yearly",
+  "sector"
+];
+
+function isAnalysisKind(value: string): value is AnalysisKind {
+  return validAnalysisKinds.includes(value as AnalysisKind);
+}
+
+function isSector(value: string): boolean {
+  return SECTORS.includes(value as (typeof SECTORS)[number]);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isAnalysisRow(value: unknown): value is AnalysisRow {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  const requiredKeys: Array<keyof AnalysisRow> = [
+    "time_ist",
+    "astro_event",
+    "nifty_impact",
+    "bank_nifty_impact",
+    "mcx_silver_impact",
+    "sector_focus",
+    "stock_focus",
+    "strategy"
+  ];
+
+  return (
+    Object.keys(value).length === requiredKeys.length &&
+    requiredKeys.every((key) => typeof value[key] === "string")
+  );
+}
+
+function isAnalysisRows(value: unknown): value is AnalysisRow[] {
+  return Array.isArray(value) && value.every((row) => isAnalysisRow(row));
+}
+
+function stripMarkdownFences(raw: string): string {
+  return raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/u, "").trim();
+}
+
+function errorResponse(message: string, status: number): NextResponse<AnalysisResponse> {
+  return NextResponse.json(
+    {
+      success: false,
+      error: message
+    },
+    { status }
+  );
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse<AnalysisResponse>> {
+  let body: AnalyzeRequestBody;
+
+  try {
+    body = (await request.json()) as AnalyzeRequestBody;
+  } catch {
+    return errorResponse("Invalid request body.", 400);
+  }
+
+  const date = typeof body.date === "string" ? body.date.trim() : "";
+  const period = typeof body.period === "string" ? body.period.trim() : "";
+  const sector = typeof body.sector === "string" ? body.sector.trim() : "";
+
+  if (!date || !period) {
+    return errorResponse("Date and period are required.", 400);
+  }
+
+  if (!isAnalysisKind(period)) {
+    return errorResponse("Invalid period selected.", 400);
+  }
+
+  if (period === "sector" && !sector) {
+    return errorResponse("Sector is required for stock selection.", 400);
+  }
+
+  if (sector && !isSector(sector)) {
+    return errorResponse("Invalid sector selected.", 400);
+  }
+
+  try {
+    const webContext = await getExaWebContext(date, period, sector || undefined);
+    const prompt = buildPrompt(period, date, sector, webContext);
+    const rawResponse = await runOpenRouterAnalysis(prompt);
+    const cleaned = stripMarkdownFences(rawResponse);
+
+    let parsed: unknown;
+
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      return errorResponse("The model returned invalid JSON. Please retry.", 502);
+    }
+
+    if (!isAnalysisRows(parsed)) {
+      return errorResponse("The model returned invalid JSON. Please retry.", 502);
+    }
+
+    return NextResponse.json({
+      success: true,
+      rows: parsed
+    });
+  } catch (error: unknown) {
+    const knownErrors = new Set([
+      "OPENROUTER_API_KEY is not configured.",
+      "OPENROUTER_MODEL is not configured.",
+      "EXA_API_KEY is not configured.",
+      "Exa web search failed."
+    ]);
+
+    const message =
+      error instanceof Error && knownErrors.has(error.message)
+        ? error.message
+        : "Unable to generate analysis right now. Please try again.";
+
+    return errorResponse(message, 500);
+  }
+}
