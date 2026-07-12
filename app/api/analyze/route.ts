@@ -40,20 +40,10 @@ function isAnalysisRow(value: unknown): value is AnalysisRow {
     return false;
   }
 
-  const requiredKeys: Array<keyof AnalysisRow> = [
-    "time_ist",
-    "astro_event",
-    "nifty_impact",
-    "bank_nifty_impact",
-    "mcx_silver_impact",
-    "sector_focus",
-    "stock_focus",
-    "strategy"
-  ];
-
+  const keys = Object.keys(value);
   return (
-    Object.keys(value).length === requiredKeys.length &&
-    requiredKeys.every((key) => typeof value[key] === "string")
+    keys.length > 0 &&
+    keys.every((key) => typeof value[key] === "string")
   );
 }
 
