@@ -41,3 +41,8 @@ pnpm-debug.log*
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Custom Windows CLI Build Wrappers
+/bin/
+patch-fs.js
+
