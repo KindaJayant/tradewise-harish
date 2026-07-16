@@ -33,6 +33,10 @@ function buildSearchQuery(date: string, period: string, sector?: string): string
   ].join(", ");
 }
 
+function buildPanchangQuery(date: string): string {
+  return `Vedic Hindu Panchang Nakshatra Tithi Karana Hora Rahu Kaal Abhijit Muhurat for ${date}`;
+}
+
 export async function getExaWebContext(
   date: string,
   period: string,
@@ -44,45 +48,78 @@ export async function getExaWebContext(
     throw new Error("EXA_API_KEY is not configured.");
   }
 
-  const response = await fetch("https://api.exa.ai/search", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey
-    },
-    body: JSON.stringify({
-      query: buildSearchQuery(date, period, sector),
-      type: "auto",
-      numResults: 8,
-      text: true
-    }),
-    cache: "no-store"
-  });
+  const marketQuery = buildSearchQuery(date, period, sector);
+  const panchangQuery = buildPanchangQuery(date);
 
-  if (!response.ok) {
+  try {
+    const [marketRes, panchangRes] = await Promise.all([
+      fetch("https://api.exa.ai/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey
+        },
+        body: JSON.stringify({
+          query: marketQuery,
+          type: "auto",
+          numResults: 6,
+          text: true
+        }),
+        cache: "no-store"
+      }),
+      fetch("https://api.exa.ai/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey
+        },
+        body: JSON.stringify({
+          query: panchangQuery,
+          type: "auto",
+          numResults: 4,
+          text: true
+        }),
+        cache: "no-store"
+      })
+    ]);
+
+    if (!marketRes.ok || !panchangRes.ok) {
+      throw new Error("Exa web search failed.");
+    }
+
+    const marketPayload = (await marketRes.json()) as ExaSearchResponse;
+    const panchangPayload = (await panchangRes.json()) as ExaSearchResponse;
+
+    const marketResults = marketPayload.results ?? [];
+    const panchangResults = panchangPayload.results ?? [];
+
+    let contextParts: string[] = [];
+
+    if (panchangResults.length > 0) {
+      contextParts.push("### Astrological Panchang Data for " + date + ":");
+      panchangResults.forEach((result, index) => {
+        const title = result.title?.trim() || "Panchang Source";
+        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 900) || "";
+        contextParts.push(`[Panchang Source ${index + 1}: ${title}]\n${text}`);
+      });
+    }
+
+    if (marketResults.length > 0) {
+      contextParts.push("\n### Market Technicals, Levels & Macro Data for " + date + ":");
+      marketResults.forEach((result, index) => {
+        const title = result.title?.trim() || "Market Source";
+        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 800) || "";
+        contextParts.push(`[Market Source ${index + 1}: ${title}]\n${text}`);
+      });
+    }
+
+    if (contextParts.length === 0) {
+      return "No fresh web results were returned for this request.";
+    }
+
+    return contextParts.join("\n\n");
+  } catch (error) {
+    console.error("Exa search error:", error);
     throw new Error("Exa web search failed.");
   }
-
-  const payload = (await response.json()) as ExaSearchResponse;
-  const results = payload.results ?? [];
-
-  if (results.length === 0) {
-    return "No fresh web results were returned for this request.";
-  }
-
-  return results
-    .map((result, index) => {
-      const title = result.title?.trim() || "Untitled source";
-      const url = result.url?.trim() || "Unknown URL";
-      const published = result.publishedDate?.trim() || "Unknown date";
-      const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 900) || "No extract available.";
-
-      return [
-        `Source ${index + 1}: ${title}`,
-        `URL: ${url}`,
-        `Published: ${published}`,
-        `Extract: ${text}`
-      ].join("\n");
-    })
-    .join("\n\n");
 }

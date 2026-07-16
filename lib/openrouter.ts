@@ -53,7 +53,7 @@ export async function runOpenRouterAnalysis(prompt: string): Promise<string> {
     body: JSON.stringify({
       model,
       messages,
-      temperature: 0.3,
+      temperature: 0.0,
       max_tokens: 12000
     }),
     cache: "no-store"

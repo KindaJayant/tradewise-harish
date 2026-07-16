@@ -1,6 +1,7 @@
 import type { AnalysisKind, Period } from "@/types/analysis";
 
-const CONTEXT_BLOCK = `Use this live web research context to ground market levels, sector cues, stocks, VIX, FII/DII, economic releases, and recent macro information whenever relevant:
+const CONTEXT_BLOCK = `Use this live web research context to ground the exact Vedic Panchang elements (Tithi, Nakshatra, Hora, Karana, Abhijit Muhurat, etc.), market levels, sector cues, stocks, VIX, FII/DII, economic releases, and recent macro information. 
+Do not guess or estimate astrological elements; rely strictly on the provided Panchang data:
 
 {{WEB_CONTEXT}}`;
 
