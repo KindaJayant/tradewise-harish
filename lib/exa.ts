@@ -123,6 +123,8 @@ export async function getExaWebContext(
     return contextParts.join("\n\n");
   } catch (error) {
     console.error("Exa search error:", error);
-    throw new Error("Exa web search failed.");
+    const detail = error instanceof Error ? error.message : String(error);
+    // If Exa fails, return a graceful fallback string so the analysis does not crash
+    return `Note: Web search context fetch encountered an issue (${detail}). Proceeding with standard historical Panchang & technical calculations for ${date}.`;
   }
 }
