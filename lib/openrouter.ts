@@ -54,6 +54,8 @@ export async function runOpenRouterAnalysis(prompt: string): Promise<string> {
       model,
       messages,
       temperature: 0.0,
+      top_p: 1.0,
+      seed: 42,
       max_tokens: 12000
     }),
     cache: "no-store"

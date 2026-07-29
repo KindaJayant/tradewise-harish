@@ -61,11 +61,11 @@ export async function getExaWebContext(
         },
         body: JSON.stringify({
           query: marketQuery,
-          type: "auto",
+          type: "neural",
           numResults: 6,
           text: true
         }),
-        cache: "no-store"
+        cache: "force-cache"
       }),
       fetch("https://api.exa.ai/search", {
         method: "POST",
@@ -75,11 +75,11 @@ export async function getExaWebContext(
         },
         body: JSON.stringify({
           query: panchangQuery,
-          type: "auto",
+          type: "neural",
           numResults: 4,
           text: true
         }),
-        cache: "no-store"
+        cache: "force-cache"
       })
     ]);
 
@@ -90,8 +90,12 @@ export async function getExaWebContext(
     const marketPayload = (await marketRes.json()) as ExaSearchResponse;
     const panchangPayload = (await panchangRes.json()) as ExaSearchResponse;
 
-    const marketResults = marketPayload.results ?? [];
-    const panchangResults = panchangPayload.results ?? [];
+    const marketResults = (marketPayload.results ?? []).sort((a, b) =>
+      (a.title || "").localeCompare(b.title || "")
+    );
+    const panchangResults = (panchangPayload.results ?? []).sort((a, b) =>
+      (a.title || "").localeCompare(b.title || "")
+    );
 
     let contextParts: string[] = [];
 
