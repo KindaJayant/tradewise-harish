@@ -61,11 +61,10 @@ export async function getExaWebContext(
         },
         body: JSON.stringify({
           query: marketQuery,
-          type: "neural",
+          type: "auto",
           numResults: 6,
           text: true
-        }),
-        cache: "force-cache"
+        })
       }),
       fetch("https://api.exa.ai/search", {
         method: "POST",
@@ -75,16 +74,16 @@ export async function getExaWebContext(
         },
         body: JSON.stringify({
           query: panchangQuery,
-          type: "neural",
+          type: "auto",
           numResults: 4,
           text: true
-        }),
-        cache: "force-cache"
+        })
       })
     ]);
 
     if (!marketRes.ok || !panchangRes.ok) {
-      throw new Error("Exa web search failed.");
+      console.error(`Exa error: market=${marketRes.status}, panchang=${panchangRes.status}`);
+      throw new Error(`Exa web search failed (${marketRes.status}/${panchangRes.status}).`);
     }
 
     const marketPayload = (await marketRes.json()) as ExaSearchResponse;
