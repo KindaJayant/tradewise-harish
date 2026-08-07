@@ -13,28 +13,19 @@ interface ExaSearchResponse {
 
 function buildSearchQuery(date: string, period: string, sector?: string): string {
   const sharedSignals =
-    "India VIX FII DII flows RBI Fed CPI rupee crude yields NSE support resistance";
+    "site:moneycontrol.com OR site:economictimes.indiatimes.com OR site:nseindia.com Nifty Bank Nifty Sensex live price support resistance FII DII VIX";
 
   if (period === "sector") {
     const sectorName = sector ?? "Indian stock market";
 
-    return [
-      `NSE ${sectorName} sector top stocks 20 EMA RSI volume breakout ${date}`,
-      `${sectorName} sector outlook India stock market ${date}`,
-      sharedSignals
-    ].join(", ");
+    return `site:moneycontrol.com OR site:economictimes.indiatimes.com NSE ${sectorName} sector top stocks 20 EMA RSI volume breakout ${date} ${sharedSignals}`;
   }
 
-  return [
-    `Nifty Bank Nifty MCX Silver ${period} trading plan support resistance ${date}`,
-    `Indian stock market sector rotation lead sectors avoid sectors FII DII VIX ${date}`,
-    `India economic calendar RBI Fed CPI Gann cycle market dates ${date}`,
-    sharedSignals
-  ].join(", ");
+  return `site:moneycontrol.com OR site:economictimes.indiatimes.com Nifty 50 Bank Nifty Sensex MCX Silver ${period} trading levels ${date} ${sharedSignals}`;
 }
 
 function buildPanchangQuery(date: string): string {
-  return `Vedic Hindu Panchang Nakshatra Tithi Karana Hora Rahu Kaal Abhijit Muhurat for ${date}`;
+  return `site:drikpanchang.com OR site:astrosage.com Hindu Panchang Tithi Nakshatra Karana Hora Rahu Kaal Abhijit Muhurat ${date}`;
 }
 
 export async function getExaWebContext(
