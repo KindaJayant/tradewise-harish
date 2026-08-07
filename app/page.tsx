@@ -32,9 +32,13 @@ const ANALYSIS_STAGES = [
 ] as const;
 
 function getTodayDate(): string {
-  const now = new Date();
-  const timezoneOffset = now.getTimezoneOffset() * 60000;
-  return new Date(now.getTime() - timezoneOffset).toISOString().split("T")[0];
+  // Always format in Indian Standard Time (Asia/Kolkata)
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
 }
 
 function LoadingSkeleton({ activeStage }: { activeStage: number }) {
@@ -436,7 +440,11 @@ function MobileControlPanel({
 
 export default function HomePage() {
   const todayDate = getTodayDate();
-  const [date, setDate] = useState<string>(todayDate);
+  const [date, setDate] = useState<string>("");
+
+  useEffect(() => {
+    setDate(getTodayDate());
+  }, []);
   const [period, setPeriod] = useState<Period>("daily");
   const [sector, setSector] = useState<Sector>("Banking");
   const [rows, setRows] = useState<AnalysisRow[]>([]);
