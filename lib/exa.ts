@@ -28,52 +28,70 @@ function buildPanchangQuery(date: string): string {
   return `site:drikpanchang.com OR site:astrosage.com Hindu Panchang Tithi Nakshatra Karana Hora Rahu Kaal Abhijit Muhurat ${date}`;
 }
 
+async function executeExaSearch(
+  apiKey: string,
+  marketQuery: string,
+  panchangQuery: string
+): Promise<[Response, Response]> {
+  return Promise.all([
+    fetch("https://api.exa.ai/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey
+      },
+      body: JSON.stringify({
+        query: marketQuery,
+        type: "auto",
+        numResults: 6,
+        text: true
+      })
+    }),
+    fetch("https://api.exa.ai/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey
+      },
+      body: JSON.stringify({
+        query: panchangQuery,
+        type: "auto",
+        numResults: 4,
+        text: true
+      })
+    })
+  ]);
+}
+
 export async function getExaWebContext(
   date: string,
   period: string,
   sector?: string
 ): Promise<string> {
-  const apiKey = process.env.EXA_API_KEY;
-
-  if (!apiKey) {
-    throw new Error("EXA_API_KEY is not configured.");
-  }
+  const primaryKey = process.env.EXA_API_KEY || "cc0362f2-2664-4103-9c5f-d92f213cccdd";
+  const fallbackKey = process.env.EXA_FALLBACK_API_KEY || "0cedf544-1612-461b-b3fc-4d52565064ee";
 
   const marketQuery = buildSearchQuery(date, period, sector);
   const panchangQuery = buildPanchangQuery(date);
 
   try {
-    const [marketRes, panchangRes] = await Promise.all([
-      fetch("https://api.exa.ai/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey
-        },
-        body: JSON.stringify({
-          query: marketQuery,
-          type: "auto",
-          numResults: 6,
-          text: true
-        })
-      }),
-      fetch("https://api.exa.ai/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey
-        },
-        body: JSON.stringify({
-          query: panchangQuery,
-          type: "auto",
-          numResults: 4,
-          text: true
-        })
-      })
-    ]);
+    let marketRes: Response;
+    let panchangRes: Response;
+
+    try {
+      [marketRes, panchangRes] = await executeExaSearch(primaryKey, marketQuery, panchangQuery);
+
+      if (!marketRes.ok || !panchangRes.ok) {
+        console.warn(`Primary Exa key failed (market=${marketRes.status}, panchang=${panchangRes.status}). Trying fallback key...`);
+        [marketRes, panchangRes] = await executeExaSearch(fallbackKey, marketQuery, panchangQuery);
+      }
+    } catch (err) {
+      console.warn("Primary Exa query error, switching to fallback key...", err);
+      [marketRes, panchangRes] = await executeExaSearch(fallbackKey, marketQuery, panchangQuery);
+    }
 
     if (!marketRes.ok || !panchangRes.ok) {
-      console.error(`Exa error: market=${marketRes.status}, panchang=${panchangRes.status}`);
+      console.error(`Exa error on both keys: market=${marketRes.status}, panchang=${panchangRes.status}`);
       throw new Error(`Exa web search failed (${marketRes.status}/${panchangRes.status}).`);
     }
 
