@@ -93,7 +93,7 @@ export async function getExaWebContext(
       contextParts.push("### Astrological Panchang Data for " + date + ":");
       panchangResults.forEach((result, index) => {
         const title = result.title?.trim() || "Panchang Source";
-        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 900) || "";
+        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 2500) || "";
         contextParts.push(`[Panchang Source ${index + 1}: ${title}]\n${text}`);
       });
     }
@@ -102,7 +102,7 @@ export async function getExaWebContext(
       contextParts.push("\n### Market Technicals, Levels & Macro Data for " + date + ":");
       marketResults.forEach((result, index) => {
         const title = result.title?.trim() || "Market Source";
-        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 800) || "";
+        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 2500) || "";
         contextParts.push(`[Market Source ${index + 1}: ${title}]\n${text}`);
       });
     }
