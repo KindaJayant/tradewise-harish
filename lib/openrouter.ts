@@ -53,6 +53,7 @@ export async function runOpenRouterAnalysis(prompt: string): Promise<string> {
     body: JSON.stringify({
       model,
       messages,
+      response_format: { type: "json_object" },
       temperature: 0.0,
       top_p: 1.0,
       seed: 42,

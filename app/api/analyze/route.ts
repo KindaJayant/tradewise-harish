@@ -52,7 +52,21 @@ function isAnalysisRows(value: unknown): value is AnalysisRow[] {
 }
 
 function stripMarkdownFences(raw: string): string {
-  return raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/u, "").trim();
+  let cleaned = raw.trim();
+  // Remove outer markdown code blocks if present
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/u, "").trim();
+
+  // Extract JSON array between first '[' and last ']' if there is surrounding prose
+  const firstBracket = cleaned.indexOf("[");
+  const lastBracket = cleaned.lastIndexOf("]");
+  if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+    cleaned = cleaned.substring(firstBracket, lastBracket + 1);
+  }
+
+  // Repair trailing commas inside objects or arrays (e.g., {"key": "val",} or [a, b,])
+  cleaned = cleaned.replace(/,\s*([\]}])/g, "$1");
+
+  return cleaned;
 }
 
 function errorResponse(message: string, status: number): NextResponse<AnalysisResponse> {
