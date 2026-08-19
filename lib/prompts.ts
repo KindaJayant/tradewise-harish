@@ -1,8 +1,9 @@
 import type { AnalysisKind, Period } from "@/types/analysis";
 
-const CONTEXT_BLOCK = `CRITICAL FACTUAL GROUNDING REQUIREMENT:
-You MUST rely strictly on the provided live web research context below to ground all exact Vedic Panchang elements (Tithi, Nakshatra, Hora, Karana, Abhijit Muhurat, etc.), market index levels (Nifty 50, Bank Nifty, Sensex), stock prices, VIX, and FII/DII numbers. 
-DO NOT hallucinate or guess market prices, technical EMA/RSI values, or astrological event times. If specific live prices are present in the web context below, use those exact figures:
+const CONTEXT_BLOCK = `CRITICAL FACTUAL GROUNDING & DRIK PANCHANG COMPLIANCE:
+1. You MUST rely strictly on the provided web research context and Drik Panchang (India / IST) for exact astrological data: Tithi, Nakshatra, Yoga, Karana, Rahu Kalam, and Abhijit Muhurta.
+2. DO NOT calculate or guess Panchang elements using generic Western software, UTC timezone, or random approximations. If Drik Panchang states Abhijit Muhurta is "None" / absent for the day, you MUST output Abhijit Muhurta as "None" and enforce "NO AUSPICIOUS WINDOW – NO NEW ENTRIES".
+3. Ground Nifty 50, Bank Nifty, Sensex, and MCX Silver levels strictly from current Indian market data. DO NOT invent support/resistance or RSI numbers.
 
 {{WEB_CONTEXT}}`;
 

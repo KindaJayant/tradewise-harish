@@ -25,7 +25,7 @@ function buildSearchQuery(date: string, period: string, sector?: string): string
 }
 
 function buildPanchangQuery(date: string): string {
-  return `site:drikpanchang.com OR site:astrosage.com Hindu Panchang Tithi Nakshatra Karana Hora Rahu Kaal Abhijit Muhurat ${date}`;
+  return `site:drikpanchang.com "Drik Panchang" India IST Hindu Panchang Tithi Nakshatra Karana Yoga Rahu Kalam Abhijit Muhurta ${date}`;
 }
 
 async function executeExaSearch(
