@@ -563,99 +563,30 @@ export default function HomePage() {
   );
 
   return (
-    <main className="min-h-screen px-4 py-4 text-slate-900 md:px-8 md:py-6 lg:px-10">
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5">
-        <section className="stellar-panel overflow-hidden rounded-[28px] px-4 py-5 text-center text-[#f5eddb] md:px-6 md:text-left lg:px-7">
-          <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <div className="mx-auto mb-4 inline-flex items-center rounded-full border border-[#f8df9a]/30 bg-[#f8df9a]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#f8df9a] md:mx-0">
-                Indian Markets / Astro Timing
-              </div>
-              <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-white md:mx-0 md:text-6xl">
-                TRADE<span className="text-[#f8df9a]">WISE</span>
-              </h1>
-              <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#d8d4c8] md:mx-0 md:text-base">
-                Triple Confirmation planning for index direction, silver levels, sector rotation, and stock selection.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <div className="md:hidden">
-          {mobileScreen === "inputs" ? (
-            <section className="space-y-4">
-              <MobileControlPanel
-                activeTab={activeTab}
-                date={date}
-                period={period}
-                sector={sector}
-                loading={viewState === "loading"}
-                onTabChange={(tab) => {
-                  changeTab(tab);
-                }}
-                onDateChange={setDate}
-                onPeriodChange={setPeriod}
-                onSectorChange={setSector}
-                onAnalyze={() => {
-                  void runAnalysis();
-                }}
-                onSelectSector={() => {
-                  void runAnalysis("sector");
-                }}
-              />
-            </section>
-          ) : (
-            <section className="space-y-3">
-              <div className="panel-surface rounded-[22px] px-4 py-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                      Step 2 of 2
-                    </div>
-                    <h2 className="text-[28px] font-bold tracking-tight text-navy">
-                      Output
-                    </h2>
-                    <p className="mt-2 text-[15px] leading-6 text-slate-600">
-                      Review the generated trading intelligence and go back to adjust inputs.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setMobileScreen("inputs")}
-                    className="rounded-[16px] border border-[#d2c2a3] bg-[#fffaf0] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-700 transition hover:border-signal hover:text-signal-dark"
-                  >
-                    Back
-                  </button>
-                </div>
-              </div>
-              {results}
-            </section>
-          )}
+    <main className="min-h-screen bg-[#101225] text-cream flex items-center justify-center p-4 md:p-8">
+      <div className="max-w-2xl w-full text-center space-y-6 rounded-[28px] p-8 md:p-12 border border-[#f8df9a]/40 bg-gradient-to-b from-[#181d3b] to-[#101225] shadow-2xl">
+        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#f8df9a]/10 border border-[#f8df9a]/30 text-[#f8df9a] text-5xl shadow-inner mx-auto">
+          ⚠️
+        </div>
+        
+        <div className="space-y-4">
+          <span className="inline-block px-4 py-1.5 rounded-full border border-[#f8df9a]/40 bg-[#f8df9a]/10 text-[#f8df9a] text-xs font-bold uppercase tracking-[0.22em]">
+            System Maintenance Notice
+          </span>
+          <h1 className="text-3xl md:text-5xl font-extrabold uppercase tracking-tight text-white">
+            Under Maintenance
+          </h1>
+          <p className="text-slate-300 text-base md:text-lg max-w-lg mx-auto leading-relaxed">
+            TradeWise is currently undergoing scheduled system updates and Panchang timing recalibration to enhance analysis accuracy.
+          </p>
         </div>
 
-        <div className="hidden md:block">
-          <section className="space-y-4">
-            <MobileControlPanel
-              activeTab={activeTab}
-              date={date}
-              period={period}
-              sector={sector}
-              loading={viewState === "loading"}
-              onTabChange={(tab) => {
-                changeTab(tab);
-              }}
-              onDateChange={setDate}
-              onPeriodChange={setPeriod}
-              onSectorChange={setSector}
-              onAnalyze={() => {
-                void runAnalysis();
-              }}
-              onSelectSector={() => {
-                void runAnalysis("sector");
-              }}
-            />
-            {results}
-          </section>
+        <div className="pt-6 border-t border-slate-700/50 flex flex-col items-center justify-center gap-2 text-xs uppercase tracking-widest text-slate-400">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#f8df9a] animate-pulse" />
+            <span className="font-semibold text-slate-200">Expected Return: Shortly</span>
+          </div>
+          <span className="text-[10px] text-slate-500">Thank you for your patience</span>
         </div>
       </div>
     </main>
