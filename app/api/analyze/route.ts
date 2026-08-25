@@ -8,6 +8,8 @@ import type { AnalysisKind, AnalysisRow, AnalysisResponse } from "@/types/analys
 
 export const runtime = "edge";
 
+const analysisCache = new Map<string, AnalysisRow[]>();
+
 interface AnalyzeRequestBody {
   date?: unknown;
   period?: unknown;
@@ -108,6 +110,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<AnalysisR
     return errorResponse("Invalid sector selected.", 400);
   }
 
+  const cacheKey = `${date}:${period}:${sector || "none"}`;
+  const cached = analysisCache.get(cacheKey);
+
+  if (cached) {
+    return NextResponse.json({
+      success: true,
+      rows: cached
+    });
+  }
+
   try {
     const webContext = await getExaWebContext(date, period, sector || undefined);
     const prompt = buildPrompt(period, date, sector, webContext);
@@ -125,6 +137,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<AnalysisR
     if (!isAnalysisRows(parsed)) {
       return errorResponse("The model returned invalid JSON. Please retry.", 502);
     }
+
+    // Cache successful response for the date/period/sector combination
+    analysisCache.set(cacheKey, parsed);
 
     return NextResponse.json({
       success: true,
