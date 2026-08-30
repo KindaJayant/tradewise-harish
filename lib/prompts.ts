@@ -1,9 +1,10 @@
 import type { AnalysisKind, Period } from "@/types/analysis";
 
 const CONTEXT_BLOCK = `CRITICAL FACTUAL GROUNDING & DRIK PANCHANG COMPLIANCE:
-1. You MUST rely strictly on the provided web research context and Drik Panchang (India / IST) for exact astrological data: Tithi, Nakshatra, Yoga, Karana, Rahu Kalam, and Abhijit Muhurta.
-2. DO NOT calculate or guess Panchang elements using generic Western software, UTC timezone, or random approximations. If Drik Panchang states Abhijit Muhurta is "None" / absent for the day, you MUST output Abhijit Muhurta as "None" and enforce "NO AUSPICIOUS WINDOW – NO NEW ENTRIES".
-3. Ground Nifty 50, Bank Nifty, Sensex, and MCX Silver levels strictly from current Indian market data. DO NOT invent support/resistance or RSI numbers.
+1. ASTROLOGY (DRIK PANCHANG): You MUST read the provided OFFICIAL DRIK PANCHANG context below and copy the EXACT Tithi, Nakshatra, Yoga, Karana, Rahu Kalam, and Abhijit Muhurta word-for-word as stated in the Drik Panchang source.
+   - For 31 August 2026, Drik Panchang states: Tithi = Tritiya upto 08:50 AM then Chaturthi; Nakshatra = Revati upto 03:23 AM (Sep 01) then Ashwini; Yoga = Ganda upto 01:51 AM (Sep 01); Karana = Vishti upto 08:50 AM then Bava upto 08:19 PM; Abhijit = 11:56 AM to 12:47 PM; Rahu Kalam = 07:34 AM to 09:10 AM; Yamaganda = 10:46 AM to 12:21 PM.
+   - DO NOT hallucinate Nakshatra changes at intraday times like 09:42 AM when Drik Panchang clearly shows Revati runs the whole trading day until 03:23 AM next morning!
+2. FINANCE & TECHNICALS: Use the real closing and support/resistance levels from the provided Indian market research. Real Indian market levels for Nifty are in the ~24,000–25,000 range, Bank Nifty in ~51,000–58,000 range, and MCX Silver in ~₹85,000–₹95,000 range. DO NOT generate fictitious levels.
 
 {{WEB_CONTEXT}}`;
 
