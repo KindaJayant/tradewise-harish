@@ -1,10 +1,10 @@
 import type { AnalysisKind, Period } from "@/types/analysis";
 
 const CONTEXT_BLOCK = `CRITICAL FACTUAL GROUNDING & DRIK PANCHANG COMPLIANCE:
-1. ASTROLOGY (DRIK PANCHANG): You MUST read the provided OFFICIAL DRIK PANCHANG context below and copy the EXACT Tithi, Nakshatra, Yoga, Karana, Rahu Kalam, and Abhijit Muhurta word-for-word as stated in the Drik Panchang source.
-   - For 31 August 2026, Drik Panchang states: Tithi = Tritiya upto 08:50 AM then Chaturthi; Nakshatra = Revati upto 03:23 AM (Sep 01) then Ashwini; Yoga = Ganda upto 01:51 AM (Sep 01); Karana = Vishti upto 08:50 AM then Bava upto 08:19 PM; Abhijit = 11:56 AM to 12:47 PM; Rahu Kalam = 07:34 AM to 09:10 AM; Yamaganda = 10:46 AM to 12:21 PM.
-   - DO NOT hallucinate Nakshatra changes at intraday times like 09:42 AM when Drik Panchang clearly shows Revati runs the whole trading day until 03:23 AM next morning!
-2. FINANCE & TECHNICALS: Use the real closing and support/resistance levels from the provided Indian market research. Real Indian market levels for Nifty are in the ~24,000–25,000 range, Bank Nifty in ~51,000–58,000 range, and MCX Silver in ~₹85,000–₹95,000 range. DO NOT generate fictitious levels.
+1. ASTROLOGY (DRIK PANCHANG): You MUST read the provided OFFICIAL DRIK PANCHANG context below for {{DATE}} and copy the EXACT Tithi, Nakshatra (with exact end timings), Yoga, Karana, Rahu Kalam, Yamaganda, and Abhijit Muhurta word-for-word as stated in the Drik Panchang source.
+   - Ground all astrological timings strictly in Indian Standard Time (IST) from the provided Drik Panchang data.
+   - DO NOT hallucinate or guess Nakshatra transitions, Yoga shifts, or auspicious windows that contradict the provided Drik Panchang data for {{DATE}}.
+2. FINANCE & TECHNICALS: Ground Nifty 50, Bank Nifty, Sensex, and MCX Silver levels strictly from the live Indian market quotes provided in the context below. DO NOT invent fictitious price levels.
 
 {{WEB_CONTEXT}}`;
 
