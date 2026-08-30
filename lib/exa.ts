@@ -13,15 +13,14 @@ interface ExaSearchResponse {
 
 function buildSearchQuery(date: string, period: string, sector?: string): string {
   const sharedSignals =
-    "site:moneycontrol.com OR site:economictimes.indiatimes.com OR site:nseindia.com Nifty Bank Nifty Sensex live price support resistance FII DII VIX";
+    "site:moneycontrol.com OR site:economictimes.indiatimes.com OR site:nseindia.com Nifty 50 Bank Nifty Sensex closing price support resistance levels FII DII VIX MCX Silver rate";
 
   if (period === "sector") {
     const sectorName = sector ?? "Indian stock market";
-
-    return `site:moneycontrol.com OR site:economictimes.indiatimes.com NSE ${sectorName} sector top stocks 20 EMA RSI volume breakout ${date} ${sharedSignals}`;
+    return `site:moneycontrol.com OR site:economictimes.indiatimes.com NSE ${sectorName} sector top stocks 20 EMA RSI volume breakout latest price ${sharedSignals}`;
   }
 
-  return `site:moneycontrol.com OR site:economictimes.indiatimes.com Nifty 50 Bank Nifty Sensex MCX Silver ${period} trading levels ${date} ${sharedSignals}`;
+  return `site:moneycontrol.com OR site:economictimes.indiatimes.com Nifty 50 Bank Nifty Sensex MCX Silver ${period} forecast strategy support resistance ${sharedSignals}`;
 }
 
 function buildPanchangQuery(date: string): string {
