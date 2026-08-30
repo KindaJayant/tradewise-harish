@@ -11,20 +11,20 @@ interface ExaSearchResponse {
   results?: ExaSearchResult[];
 }
 
-function buildSearchQuery(date: string, period: string, sector?: string): string {
-  const sharedSignals =
-    "site:moneycontrol.com OR site:economictimes.indiatimes.com OR site:nseindia.com Nifty 50 Bank Nifty Sensex closing price support resistance levels FII DII VIX MCX Silver rate";
-
+function buildMoneycontrolQuery(date: string, period: string, sector?: string): string {
   if (period === "sector") {
     const sectorName = sector ?? "Indian stock market";
-    return `site:moneycontrol.com OR site:economictimes.indiatimes.com NSE ${sectorName} sector top stocks 20 EMA RSI volume breakout latest price ${sharedSignals}`;
+    return `site:moneycontrol.com NSE ${sectorName} sector top stocks 20 EMA RSI latest closing price`;
   }
-
-  return `site:moneycontrol.com OR site:economictimes.indiatimes.com Nifty 50 Bank Nifty Sensex MCX Silver ${period} forecast strategy support resistance ${sharedSignals}`;
+  return `site:moneycontrol.com Nifty 50 Bank Nifty Sensex MCX Silver closing price support resistance levels`;
 }
 
-function buildPanchangQuery(date: string): string {
-  return `site:drikpanchang.com "Drik Panchang" India IST Hindu Panchang Tithi Nakshatra Karana Yoga Rahu Kalam Abhijit Muhurta ${date}`;
+function buildEconomicTimesQuery(date: string, period: string, sector?: string): string {
+  if (period === "sector") {
+    const sectorName = sector ?? "Indian stock market";
+    return `site:economictimes.indiatimes.com NSE ${sectorName} stocks performance volume 20 EMA RSI price`;
+  }
+  return `site:economictimes.indiatimes.com Nifty 50 Bank Nifty Sensex MCX Silver rate latest close support resistance`;
 }
 
 function getDrikPanchangUrl(date: string): string {
@@ -51,7 +51,7 @@ async function executeDirectUrlFetch(apiKey: string, url: string): Promise<Respo
   });
 }
 
-async function executeMarketSearch(apiKey: string, query: string): Promise<Response> {
+async function executeMarketSearch(apiKey: string, query: string, numResults = 4): Promise<Response> {
   return fetch("https://api.exa.ai/search", {
     method: "POST",
     headers: {
@@ -61,10 +61,10 @@ async function executeMarketSearch(apiKey: string, query: string): Promise<Respo
     body: JSON.stringify({
       query,
       type: "auto",
-      numResults: 6,
+      numResults,
       contents: {
         text: {
-          maxCharacters: 3000
+          maxCharacters: 2500
         }
       }
     })
@@ -80,61 +80,74 @@ export async function getExaWebContext(
   const fallbackKey = process.env.EXA_FALLBACK_API_KEY || "0cedf544-1612-461b-b3fc-4d52565064ee";
 
   const drikUrl = getDrikPanchangUrl(date);
-  const marketQuery = buildSearchQuery(date, period, sector);
+  const mcQuery = buildMoneycontrolQuery(date, period, sector);
+  const etQuery = buildEconomicTimesQuery(date, period, sector);
 
   try {
     let panchangRes: Response;
-    let marketRes: Response;
+    let mcRes: Response;
+    let etRes: Response;
 
     try {
-      [panchangRes, marketRes] = await Promise.all([
+      [panchangRes, mcRes, etRes] = await Promise.all([
         executeDirectUrlFetch(primaryKey, drikUrl),
-        executeMarketSearch(primaryKey, marketQuery)
+        executeMarketSearch(primaryKey, mcQuery, 3),
+        executeMarketSearch(primaryKey, etQuery, 3)
       ]);
 
-      if (!panchangRes.ok || !marketRes.ok) {
-        console.warn(`Primary Exa key failed (panchang=${panchangRes.status}, market=${marketRes.status}). Trying fallback key...`);
-        [panchangRes, marketRes] = await Promise.all([
+      if (!panchangRes.ok || !mcRes.ok || !etRes.ok) {
+        console.warn(`Primary Exa key failed. Trying fallback key...`);
+        [panchangRes, mcRes, etRes] = await Promise.all([
           executeDirectUrlFetch(fallbackKey, drikUrl),
-          executeMarketSearch(fallbackKey, marketQuery)
+          executeMarketSearch(fallbackKey, mcQuery, 3),
+          executeMarketSearch(fallbackKey, etQuery, 3)
         ]);
       }
     } catch (err) {
       console.warn("Primary Exa query error, switching to fallback key...", err);
-      [panchangRes, marketRes] = await Promise.all([
+      [panchangRes, mcRes, etRes] = await Promise.all([
         executeDirectUrlFetch(fallbackKey, drikUrl),
-        executeMarketSearch(fallbackKey, marketQuery)
+        executeMarketSearch(fallbackKey, mcQuery, 3),
+        executeMarketSearch(fallbackKey, etQuery, 3)
       ]);
     }
 
-    if (!panchangRes.ok || !marketRes.ok) {
-      console.error(`Exa error on both keys: panchang=${panchangRes.status}, market=${marketRes.status}`);
-      throw new Error(`Exa fetch failed (${panchangRes.status}/${marketRes.status}).`);
+    if (!panchangRes.ok) {
+      throw new Error(`Exa panchang fetch failed with status ${panchangRes.status}`);
     }
 
     const panchangPayload = (await panchangRes.json()) as ExaSearchResponse;
-    const marketPayload = (await marketRes.json()) as ExaSearchResponse;
+    const mcPayload = mcRes && mcRes.ok ? ((await mcRes.json()) as ExaSearchResponse) : { results: [] };
+    const etPayload = etRes && etRes.ok ? ((await etRes.json()) as ExaSearchResponse) : { results: [] };
 
     let contextParts: string[] = [];
 
     const panchangResults = panchangPayload.results ?? [];
     if (panchangResults.length > 0) {
-      contextParts.push(`### OFFICIAL DRIK PANCHANG (India / IST) FOR ${date} (Source: ${drikUrl}):`);
+      contextParts.push(`### 1. OFFICIAL DRIK PANCHANG (India / IST) FOR ${date} (Source: ${drikUrl}):`);
       panchangResults.forEach((result) => {
         const text = result.text?.replace(/\s+/g, " ").trim() || "";
         contextParts.push(text.slice(0, 6000));
       });
     }
 
-    const marketResults = (marketPayload.results ?? []).sort((a, b) =>
-      (a.title || "").localeCompare(b.title || "")
-    );
-    if (marketResults.length > 0) {
-      contextParts.push(`\n### LIVE FINANCIAL DATA (Nifty, Bank Nifty, Sensex, MCX Silver, Stocks) FOR ${date}:`);
-      marketResults.forEach((result, index) => {
-        const title = result.title?.trim() || "Market Source";
-        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 3000) || "";
-        contextParts.push(`[Source ${index + 1}: ${title}]\n${text}`);
+    const mcResults = mcPayload.results ?? [];
+    if (mcResults.length > 0) {
+      contextParts.push(`\n### 2. FINANCIAL SOURCE A (Moneycontrol - Prices & Levels) FOR ${date}:`);
+      mcResults.forEach((result, index) => {
+        const title = result.title?.trim() || "Moneycontrol Quote";
+        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 2500) || "";
+        contextParts.push(`[Moneycontrol ${index + 1}: ${title}]\n${text}`);
+      });
+    }
+
+    const etResults = etPayload.results ?? [];
+    if (etResults.length > 0) {
+      contextParts.push(`\n### 3. FINANCIAL SOURCE B (Economic Times - Verification & Commodities) FOR ${date}:`);
+      etResults.forEach((result, index) => {
+        const title = result.title?.trim() || "Economic Times Quote";
+        const text = result.text?.replace(/\s+/g, " ").trim().slice(0, 2500) || "";
+        contextParts.push(`[Economic Times ${index + 1}: ${title}]\n${text}`);
       });
     }
 

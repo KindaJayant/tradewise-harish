@@ -1,10 +1,15 @@
 import type { AnalysisKind, Period } from "@/types/analysis";
 
-const CONTEXT_BLOCK = `CRITICAL FACTUAL GROUNDING & DRIK PANCHANG COMPLIANCE:
-1. ASTROLOGY (DRIK PANCHANG): You MUST read the provided OFFICIAL DRIK PANCHANG context below for {{DATE}} and copy the EXACT Tithi, Nakshatra (with exact end timings), Yoga, Karana, Rahu Kalam, Yamaganda, and Abhijit Muhurta word-for-word as stated in the Drik Panchang source.
-   - Ground all astrological timings strictly in Indian Standard Time (IST) from the provided Drik Panchang data.
-   - DO NOT hallucinate or guess Nakshatra transitions, Yoga shifts, or auspicious windows that contradict the provided Drik Panchang data for {{DATE}}.
-2. FINANCE & TECHNICALS: Ground Nifty 50, Bank Nifty, Sensex, and MCX Silver levels strictly from the live Indian market quotes provided in the context below. DO NOT invent fictitious price levels.
+const CONTEXT_BLOCK = `CRITICAL FACTUAL GROUNDING & DUAL-SOURCE RECONFIRMATION COMPLIANCE:
+1. ASTROLOGY (OFFICIAL DRIK PANCHANG): You MUST read the provided OFFICIAL DRIK PANCHANG context below for {{DATE}} and copy the EXACT Tithi, Nakshatra (with exact end timings), Yoga, Karana, Rahu Kalam, Yamaganda, and Abhijit Muhurta word-for-word as stated in Drik Panchang.
+   - Ground all astrological timings strictly in Indian Standard Time (IST).
+   - DO NOT hallucinate or guess Nakshatra transitions, Yoga shifts, or auspicious windows.
+2. DUAL-SOURCE FINANCIAL PRICE RECONFIRMATION (Nifty 50, Bank Nifty, Sensex, MCX Silver):
+   - You MUST cross-verify prices from BOTH financial sources provided in the context below:
+     * Source A: Moneycontrol
+     * Source B: Economic Times
+   - Reconfirm that Nifty 50, Bank Nifty, Sensex, and MCX Silver baseline prices match between both sources before computing projected support/resistance, breakouts, and intraday targets.
+   - Ground all price levels in realistic Indian market reality (Nifty ~24k-25k, Bank Nifty ~51k-58k, Silver ~₹85k-₹95k). DO NOT invent fictitious numbers.
 
 {{WEB_CONTEXT}}`;
 
