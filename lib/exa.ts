@@ -28,13 +28,13 @@ function buildEconomicTimesQuery(date: string, period: string, sector?: string):
 }
 
 function getDrikPanchangUrl(date: string): string {
-  // Format YYYY-MM-DD into DD/MM/YYYY for Drik Panchang URL
+  // Format YYYY-MM-DD into DD/MM/YYYY for Drik Panchang URL and lock to Delhi / Indian Standard Time coordinates
   const parts = date.split("-");
   if (parts.length === 3) {
     const [y, m, d] = parts;
-    return `https://www.drikpanchang.com/panchang/day-panchang.html?date=${encodeURIComponent(`${d}/${m}/${y}`)}`;
+    return `https://www.drikpanchang.com/panchang/day-panchang.html?date=${encodeURIComponent(`${d}/${m}/${y}`)}&geoname-id=1273294`;
   }
-  return `https://www.drikpanchang.com/panchang/day-panchang.html?date=${encodeURIComponent(date)}`;
+  return `https://www.drikpanchang.com/panchang/day-panchang.html?date=${encodeURIComponent(date)}&geoname-id=1273294`;
 }
 
 async function executeDirectUrlFetch(apiKey: string, url: string): Promise<Response> {
