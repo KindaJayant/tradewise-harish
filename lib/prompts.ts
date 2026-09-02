@@ -255,20 +255,19 @@ ${buildJsonContract(
 
 const SECTOR_PROMPT = `### 🏆 TRIPLE CONFIRMATION 6.0 – SECTOR STOCK SELECTOR & ANALYSIS
 
-Generate a precise, high-conviction Stock Selection & Triple Confirmation Analysis for the **{{SECTOR}}** sector on **{{DATE}}**.
+Perform a rigorous, high-conviction Stock Selection & Triple Confirmation Analysis for the **{{SECTOR}}** sector on **{{DATE}}**.
 
 CRITICAL INSTRUCTIONS & ACCURACY STANDARDS:
-1. Return exactly 3 to 4 distinct stock cards (e.g. "Stock 1: [Ticker]", "Stock 2: [Ticker]", "Stock 3: [Ticker]").
-2. Real Numerical Precision (NO VAGUE TEXT):
-   - Every stock MUST have realistic active Indian market prices (e.g. HDFC Bank ~₹1,640, ICICI Bank ~₹1,220, SBI ~₹810, TCS ~₹4,180, Infosys ~₹1,860, Tata Motors ~₹980, Reliance ~₹2,950).
-   - Technical Score must state: Exact LTP, 20 EMA, RSI-14 (e.g. "LTP: ₹1,642 | 20 EMA: ₹1,628 (Bullish) | RSI(14): 58.4 | Vol: 1.4x Avg").
-   - Risk Checks must state: Stop Loss % (2-3%), Sizing % of normal (e.g. "SL: ₹1,600 (2.5%) | Position Size: 75% | Inauspicious Window Avoid: Yamaganda 09:10-10:45").
-   - Targets & Levels must state: Entry Zone, Target 1, Target 2, Risk/Reward (e.g. "Entry: ₹1,640-1,645 | Target 1: ₹1,680 | Target 2: ₹1,710 | SL: ₹1,600").
-3. Astrological Checklist:
-   - State Sector Ruling Planet (e.g. Banking: Jupiter/Sun; IT: Mercury; Auto: Venus/Mars; Metals: Saturn/Mars).
-   - Ground against Drik Panchang: Nakshatra, Yoga, Abhijit Muhurta (11:55 AM - 12:46 PM), and Yamaganda/Gulika windows.
-4. Final Verdict / Action:
-   - Explicit BUY / WAIT / AVOID verdict with the exact confirmation reason.
+1. Return 3 to 4 distinct stock cards where each item represents ONE specific company stock in the {{SECTOR}} sector (e.g., time_ist: "Stock 1: HDFC Bank", time_ist: "Stock 2: ICICI Bank", time_ist: "Stock 3: State Bank of India").
+2. Real Numerical Precision (NO VAGUE TEXT OR TIME SLOTS IN CARD TITLES):
+   - time_ist: "Stock [Number]: [Stock Name & NSE Symbol]"
+   - astro_event (Astro Checklist): Sector Ruling Planet dignity today, Abhijit Muhurta timing (11:55-12:46 IST), Nakshatra & Yoga alignment, Inauspicious hours (Yamaganda/Gulika/Rahu) to avoid.
+   - nifty_impact (Technical Score): Exact LTP (e.g. ₹1,642.50), 20 EMA (₹1,628.00), RSI-14 (58.4), Volume breakout vs 20-day average (1.6x).
+   - bank_nifty_impact (Risk Checks): Strict Stop Loss % (2.0% to 2.8%), Max capital risk (1%), Position sizing % of normal (60-85%).
+   - mcx_silver_impact (Targets / SL): Entry Range (e.g. ₹1,640 - ₹1,645), Target 1 (₹1,680), Target 2 (₹1,710), Stop Loss (₹1,600).
+   - sector_focus (Sector Cues): Sector sentiment, FII/DII flow in the sector, relative strength vs Nifty 50 / Bank Nifty.
+   - stock_focus (Stock Details): Fundamental drivers, quarterly earnings momentum, key resistance pivot breakout.
+   - strategy (Verdict / Action): Clear verdict: "BUY SETUP (PASS) — Enter during Abhijit window above ₹1,645 with strict ₹1,600 SL" or "WAIT / AVOID (FAIL) — Volume expansion below 1.5x threshold".
 
 ${CONTEXT_BLOCK}
 
