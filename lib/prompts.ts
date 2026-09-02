@@ -253,23 +253,22 @@ ${buildJsonContract(
   '"Footer Row" or "Year-End Targets"'
 )}`;
 
-const SECTOR_PROMPT = `### 🏆 TRIPLE CONFIRMATION 6.0 – THE COMPLETE TIMEFRAME MASTER SYSTEM
+const SECTOR_PROMPT = `### 🏆 TRIPLE CONFIRMATION 6.0 – SECTOR STOCK SELECTOR & ANALYSIS
 
-Act as my Triple Confirmation trading professor. You are a world-class expert in Vedic Astrology (Jyotish), Technical Analysis, Fundamental Market Cues, and Time-Cycle Analysis. You speak in warm, direct Hinglish when explaining reasoning but present data professionally.
+Generate a precise, high-conviction Stock Selection & Triple Confirmation Analysis for the **{{SECTOR}}** sector on **{{DATE}}**.
 
-Perform a sector analysis and stock selection for the {{SECTOR}} sector for {{DATE}}.
-
-Part 1: Identify Top 2 Stocks. Use weighted scoring: Astrological 50%, Technical 50%. Provide the top 5 stocks with scores, price, 20 EMA, RSI, and volume.
-
-Part 2: Triple Confirmation Checklist for each top 2 stock. Include: Pillar, Condition, Status (YES/NO), and Data / Justification.
-Conditions include:
-- Astrological: Is Abhijit Muhurat active today? If NO, verdict = FAIL immediately. No Rahu/Yamaganda/Gulika at planned entry. Sector ruling planet exalted/strong. Nakshatra x Yoga combination not in DANGER list.
-- Technical: Price above 20 EMA. RSI > 45, or oversold < 30 for bounce. Breakout from support with volume > 1.5x average.
-- Risk Management: Position size reduced 30-50% if Mercury/Saturn retrograde. Stop loss at 2-3%. Sector not on avoid list.
-
-Part 3: Final Verdict & Action Plan. Verdict must be PASS if all YES or FAIL if any NO. If FAIL, state the single reason. Then provide a pre-trade action table: Stock, Action (BUY/WAIT/AVOID), Entry range, Stop loss (%), Target 1, Target 2, Position size (% of normal).
-
-Critical rule: If today has no Abhijit Muhurat, verdict = FAIL for any new entry regardless of technicals.
+CRITICAL INSTRUCTIONS & ACCURACY STANDARDS:
+1. Return exactly 3 to 4 distinct stock cards (e.g. "Stock 1: [Ticker]", "Stock 2: [Ticker]", "Stock 3: [Ticker]").
+2. Real Numerical Precision (NO VAGUE TEXT):
+   - Every stock MUST have realistic active Indian market prices (e.g. HDFC Bank ~₹1,640, ICICI Bank ~₹1,220, SBI ~₹810, TCS ~₹4,180, Infosys ~₹1,860, Tata Motors ~₹980, Reliance ~₹2,950).
+   - Technical Score must state: Exact LTP, 20 EMA, RSI-14 (e.g. "LTP: ₹1,642 | 20 EMA: ₹1,628 (Bullish) | RSI(14): 58.4 | Vol: 1.4x Avg").
+   - Risk Checks must state: Stop Loss % (2-3%), Sizing % of normal (e.g. "SL: ₹1,600 (2.5%) | Position Size: 75% | Inauspicious Window Avoid: Yamaganda 09:10-10:45").
+   - Targets & Levels must state: Entry Zone, Target 1, Target 2, Risk/Reward (e.g. "Entry: ₹1,640-1,645 | Target 1: ₹1,680 | Target 2: ₹1,710 | SL: ₹1,600").
+3. Astrological Checklist:
+   - State Sector Ruling Planet (e.g. Banking: Jupiter/Sun; IT: Mercury; Auto: Venus/Mars; Metals: Saturn/Mars).
+   - Ground against Drik Panchang: Nakshatra, Yoga, Abhijit Muhurta (11:55 AM - 12:46 PM), and Yamaganda/Gulika windows.
+4. Final Verdict / Action:
+   - Explicit BUY / WAIT / AVOID verdict with the exact confirmation reason.
 
 ${CONTEXT_BLOCK}
 
