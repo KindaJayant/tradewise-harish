@@ -9,7 +9,12 @@ const CONTEXT_BLOCK = `CRITICAL FACTUAL GROUNDING & DUAL-SOURCE RECONFIRMATION C
      * Source A: Moneycontrol
      * Source B: Economic Times
    - Reconfirm that Nifty 50, Bank Nifty, Sensex, and MCX Silver baseline prices match between both sources before computing projected support/resistance, breakouts, and intraday targets.
-   - Ground all price levels in realistic Indian market reality (Nifty ~24k-25k, Bank Nifty ~51k-58k, Silver ~₹85k-₹95k). DO NOT invent fictitious numbers.
+   - Ground all price levels in current Indian market reality:
+     * Nifty 50: ~24,000–24,500 range
+     * Bank Nifty: ~57,000–58,500 range
+     * Sensex: ~76,500–77,500 range
+     * MCX Silver: ~₹2,30,000–₹2,45,000 per kg range (NOT outdated 85k figures).
+   - DO NOT invent fictitious numbers.
 
 {{WEB_CONTEXT}}`;
 
