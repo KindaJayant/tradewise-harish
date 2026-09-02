@@ -13,16 +13,16 @@ interface ExaSearchResponse {
 
 function buildMoneycontrolQuery(date: string, period: string, sector?: string): string {
   if (period === "sector") {
-    const sectorName = sector ?? "Indian stock market";
-    return `site:moneycontrol.com NSE ${sectorName} sector top stocks 20 EMA RSI latest closing price`;
+    const sectorName = sector ?? "Banking";
+    return `site:screener.in/company/ OR site:moneycontrol.com/india/stockpricequote/ NSE ${sectorName} sector top stocks CMP Rs P/E 20 EMA RSI`;
   }
-  return `site:moneycontrol.com Nifty 50 Bank Nifty Sensex MCX Silver closing price support resistance levels`;
+  return `site:moneycontrol.com OR site:tradingview.com/symbols/ Nifty 50 Bank Nifty Sensex MCX Silver closing price support resistance levels`;
 }
 
 function buildEconomicTimesQuery(date: string, period: string, sector?: string): string {
   if (period === "sector") {
-    const sectorName = sector ?? "Indian stock market";
-    return `site:economictimes.indiatimes.com NSE ${sectorName} stocks performance volume 20 EMA RSI price`;
+    const sectorName = sector ?? "Banking";
+    return `site:economictimes.indiatimes.com OR site:screener.in NSE ${sectorName} stocks performance volume 20 EMA RSI price`;
   }
   return `site:economictimes.indiatimes.com Nifty 50 Bank Nifty Sensex MCX Silver rate latest close support resistance`;
 }
