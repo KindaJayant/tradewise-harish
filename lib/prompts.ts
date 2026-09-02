@@ -76,27 +76,18 @@ const HIERARCHICAL_DECISION_RULES = `
 3. Silver direction must match the market bias.
 `;
 
-const DAILY_PROMPT = `### 🏆 TRIPLE CONFIRMATION 6.0 – THE COMPLETE TIMEFRAME MASTER SYSTEM
+const DAILY_PROMPT = `### 🏆 TRIPLE CONFIRMATION 6.0 – INTRADAY TRADING PLAN
 
-Act as my Triple Confirmation trading professor. You are a world-class expert in Vedic Astrology (Jyotish), Technical Analysis, Fundamental Market Cues, and Time-Cycle Analysis. You speak in warm, direct Hinglish when explaining reasoning but present data professionally.
-
-Generate a detailed intraday trading plan for {{DATE}} for Nifty, Bank Nifty, Sensex, and MCX Silver across 8 time slots:
+Generate a structured, clean, and concise intraday trading plan for {{DATE}} for Nifty, Bank Nifty, Sensex, and MCX Silver across 8 standard time slots:
 Time Slots: 09:15-09:37, 09:37-10:30, 10:30-11:36, 11:36-12:08, 12:08-12:24, 12:24-12:46, 12:46-13:30, 13:30-14:30, 14:30-15:30.
 
-If Abhijit Muhurat is absent, state "NO AUSPICIOUS WINDOW – NO NEW ENTRIES" in the Actionable Strategy column for all time slots.
-
-Requirements per row:
-1. Astrological Event: Name ruling Nakshatra (start/end), Hora planet with exact timing, Karana (Vishti = avoid), Nakshatra Sandhi (if within 2 hours of transition mark ⚠️ "HIGH VOLATILITY – AVOID"), Yoga name, Abhijit timing if active, Rahu Kaal, Yamaganda, Gulika.
-2. Market Bias: BULLISH/BEARISH/NEUTRAL with planetary reason.
-3. Technical Levels: Support/Resistance (round numbers), 20/50/200 EMA, RSI 14, Breakout levels for Nifty, Bank Nifty, and Sensex.
-4. Silver: Precise ₹ entry, target 1, target 2, stop loss (direction matching bias).
-5. Bullish Sectors: 2 sectors with 2 stocks each (above 20 EMA, RSI>50) + astrological reason.
-6. Bearish Sectors: 2 sectors with 2 stocks each (below 20 EMA or RSI<50) + astrological reason.
-7. Actionable Strategy: BUY Strategy (Entry, Target, SL, Position Size %) AND SELL Strategy (Entry, Target, SL, Position Size %). Reduce 30-50% if Mercury retrograde or no Abhijit. If Rahu Kaal/Yamaganda/Sandhi: "AVOID – NO NEW ENTRIES".
-8. Add a Risk Management footer row with overall position size reduction, max risk per trade, and retrograde planets reminder.
-9. Add a Footer Summary row with single best entry window (BUY & SELL) and absolute avoid window.
-
-Assume today is {{DATE}}.
+CRITICAL FORMATTING RULES — KEEP OUTPUT CONCISE AND HIGH-SIGNAL:
+- Market Bias: State single bias keyword (e.g. BULLISH, BEARISH, NEUTRAL, VOLATILE / AVOID) followed by a short 1-line reason (max 15 words). DO NOT write lengthy multi-sentence paragraphs.
+- Astrological Event: Terse format: "Nakshatra: [Name] (till [Time]) | Hora: [Planet] | Karana: [Name] | Yoga: [Name] | Restrictions: [Yamaganda/Gulika/Rahu/None] | Abhijit: [Active/Absent]".
+- Technical Levels: Clean format with Anchor Close, S1/S2, R1/R2, Breakout levels.
+- Silver: Clean format: "Anchor: ~Rs 2,42,000/kg | S: 2,40,000 / 2,38,000 | R: 2,44,000 / 2,46,000 | Entry: Buy/Sell setup, SL, T1, T2".
+- Bullish / Bearish Sectors: List 2 sectors with 2 stocks each (e.g. "Pharma (Sun Pharma, Cipla) | FMCG (ITC, Dabur)").
+- Actionable Strategy: Direct trade instruction with Position Size % and SL. If inauspicious window active: "AVOID — NO NEW ENTRIES ([Reason]). Size: 0% new."
 
 ${HIERARCHICAL_DECISION_RULES}
 
@@ -117,22 +108,17 @@ ${buildJsonContract(
   '"Risk Management", "Footer Summary"'
 )}`;
 
-const WEEKLY_PROMPT = `### 🏆 TRIPLE CONFIRMATION 6.0 – THE COMPLETE TIMEFRAME MASTER SYSTEM
+const WEEKLY_PROMPT = `### 🏆 TRIPLE CONFIRMATION 6.0 – WEEKLY TRADING PLAN
 
-Act as my Triple Confirmation trading professor. You are a world-class expert in Vedic Astrology (Jyotish), Technical Analysis, Fundamental Market Cues, and Time-Cycle Analysis. You speak in warm, direct Hinglish when explaining reasoning but present data professionally.
+Generate a structured, clean, and concise weekly trading plan for the week starting {{DATE}} for Nifty, Bank Nifty, Sensex, and MCX Silver. Each row is one trading day (Monday to Friday), plus a final Footer Row.
 
-Generate a weekly trading plan for the week starting {{DATE}} for Nifty, Bank Nifty, Sensex, and MCX Silver. Each row must be one trading day (Monday to Friday), with a final footer row.
-
-Requirements per day:
-1. Astrological Highlights: Tithi (Shukla/Krishna + name), Nakshatra (start/end), Abhijit active (exact timing), Rahu Kaal, Yamaganda, Gulika, Nakshatra Sandhi (if any), dominant Karana (avoid Vishti), best Hora window (planet + hour).
-2. Market Bias: Bullish/Bearish/Sidelines with planetary reason.
-3. Technical Levels: Round support/resistance for Nifty, Bank Nifty, Sensex, Silver. 20/50/200 EMA trend, RSI 14.
-4. Bullish Sectors: 2 sectors with 2 stocks each (above 20 EMA, RSI>50) + astrological reason.
-5. Bearish Sectors: 2 sectors with 2 stocks each (below 20 EMA or RSI<50) + astrological reason.
-6. Actionable Strategy: Daily bias, recommended entry window, position size % of normal (reduce 30% if Mercury retrograde), stop loss guidance (2-3% for stocks, 1% for indices).
-7. Add a Footer Row: Gann pressure dates (30/60/90/180-day cycles), overall position size base, key economic releases (RBI, Fed, CPI, etc.), "best day & window" and "worst day to hold overnight".
-
-Use previous week's Friday closing data where available.
+CRITICAL FORMATTING RULES — CONCISE & STRUCTURED:
+- Market Bias: Single bias keyword + 1-line concise reason.
+- Astrological Highlights: Terse format: "Tithi: [Name] | Nakshatra: [Name] | Yoga: [Name] | Karana: [Name] | Best Hora: [Planet] | Restrictions: [Times]".
+- Technical Levels: Expected weekly/daily S1/S2, R1/R2, 20/50/200 EMA trend, RSI-14.
+- Silver: Expected range (S/R) in ~Rs 2,30,000–2,45,000/kg band.
+- Sectors: 2 Favoured sectors with 2 stocks each, 2 Bearish sectors with 2 stocks each.
+- Actionable Strategy: Recommended entry window, Position Size %, and Stop Loss guidance.
 
 ${HIERARCHICAL_DECISION_RULES}
 
